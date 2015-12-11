@@ -1,0 +1,1 @@
+THIS WILL BUILD A MODULE THAT LOGS "Hello, World!" upon insertion into the kernel, and "Goodbye, World!" upon removal.
