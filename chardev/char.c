@@ -20,9 +20,10 @@ static ssize_t charWrite(struct file *, char *, size_t, loff_t *);
 
 /* Some global variables ;) */
 static dev_t majorNum = 0;
+static int devOpen = 0; // This will track if the device is open or not. 0 = closed; 1 = open.
 
 /* Driver Initialization Function. */
-static int char_init(void)
+static int charInit(void)
 {
   /* Allocate Major device number and check for errors. */
   int result = alloc_chrdev_region(&dev, MINOR, NUM_DEVS, DEVICE_NAME ); // The device number is stored in "dev".
@@ -32,3 +33,18 @@ static int char_init(void)
     return result;
   }
 }
+
+/* Driver De-Initialization Function. */
+static void charClean(void)
+{
+  /* De-Allocate the previously allocated major number */
+  unregister_chrdev_region(dev, NUM_DEVS);
+}
+
+/* Device open routine */
+
+/* Device close routine */
+
+/* Device read routine */
+
+/* Device write routine */
