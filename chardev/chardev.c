@@ -85,7 +85,7 @@ static ssize_t charRead(struct file *filp, char *usrBuf, size_t count, loff_t *o
   int readByte = 0;
   int i = 0;
   
-  while(count != 0 && krnBuf[i] != '\0') {
+  while(count > 0 && krnBuf[i] != '\0') {
     put_user(krnBuf[i], usrBuf);
     usrBuf++;
     readByte++;
