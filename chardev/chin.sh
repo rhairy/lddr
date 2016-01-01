@@ -3,14 +3,9 @@
 
 #!/bin/bash
 
-# Check if module is loaded.
-modinfo chardev.ko # Returns "1" if it can't find the module
+# Set some variables
 
-if [ $? ]
-then
-    printf "ERROR - The module was already loaded.\n"
-    exit -1
-fi
+modname=chardev
 
 # Check if device file is already there.
 if [ -c /dev/chardev ]
@@ -20,23 +15,22 @@ then
 fi
 
 # Insert Module and make sure it took.
-insmod ./chardev.ko
+insmod chardev.ko
 
-if [ $? ]
+if [ "$?" != 0 ]
 then
     printf "ERROR - Unable to insert the module.\n"
-    return -1
+    exit -1
 fi
 
 # Create device file.
-major=$(awk "\$2==\"$module\" {print \$1}" /proc/devices) # Find major number of inserted module. Special thanks to LDDR.
+major=$(awk "\$2==\"$modname\" {print \$1}" /proc/devices) # Find major number of inserted module. Special thanks to LDDR.
 
-mknod /dev/chardev char $major 0
+mknod /dev/chardev char "$major" 0
 
-if [ $? ]
+if [ "$?" != 0 ]
 then
     printf "ERROR - Unable to create the device file.\n"
-    return -1
+    rmmod chardev.ko
+    exit -1
 fi
-
-
